@@ -31,24 +31,6 @@ module "blog_vpc" {
   }
 }
 
-resource "aws_route_table" "blog_sg" {
-  vpc_id = module.blog_vpc.vpc_id
-
-  route {
-    cidr_block = "10.0.1.0/24"
-    gateway_id = aws_internet_gateway.blog_sg.id
-  }
-
-  route {
-    ipv6_cidr_block        = "::/0"
-    egress_only_gateway_id = aws_egress_only_internet_gateway.blog_sg.id
-  }
-
-  tags = {
-    Name = "Blog_SG"
-  }
-}
-
 resource "aws_instance" "blog" {
   ami                    = data.aws_ami.app_ami.id
   instance_type          = var.instance_type
@@ -71,5 +53,3 @@ module "blog_sg" {
   egress_rules = ["all-all"]
   egress_cidr_blocks = ["0.0.0.0/0"]
 }
-
-
